@@ -1,0 +1,24 @@
+name: Windows Automated Task
+
+on:
+  workflow_dispatch: # Allows manual start from the Actions tab on your phone
+
+jobs:
+  build-and-run:
+    runs-on: windows-latest
+    timeout-minutes: 360 # Maximum 6-hour limit per GitHub Actions job
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check Hardware & Network Specs
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_VideoController | Select-Object Name, AdapterRAM
+          python task.py
